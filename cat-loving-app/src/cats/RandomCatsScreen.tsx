@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import RandomCatsTop from '../common/RandomCatsTop';
 import CatImage from '../common/CatImage';
 import { getRandomCats, CatData } from '../services/catService';
@@ -33,6 +33,13 @@ const RandomCatsScreen: React.FC = () => {
     fetchData();
     }, []);
 
+    const refreshListOfCats = useCallback(async() => {
+        const newCats = await getRandomCats();
+        const allCats = [...cats, ...newCats];
+        setCats(allCats);
+        localStorage.setItem('cats', JSON.stringify(allCats));
+     },[]);
+
     return (
         <div>
             <RandomCatsTop 
@@ -40,10 +47,7 @@ const RandomCatsScreen: React.FC = () => {
                 imagesPerRow={imagesPerRow} 
                 setImagesPerRow={setImagesPerRow}  
                 getNewListOfCats={async ()=> {
-                    localStorage.removeItem('cats');
-                    const newCats = await getRandomCats();
-                    setCats(newCats);
-                    localStorage.setItem('cats', JSON.stringify(newCats));
+                    await refreshListOfCats();
                 }}
             />
             <CatImageListContainer >

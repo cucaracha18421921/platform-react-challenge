@@ -77,10 +77,7 @@ const BreedDetailUrl: React.FC<{ breed: Breed, catId: string }> = ({ breed, catI
 }
 
 const CatDetail: React.FC<CatDetailProps> = ({ catId: id = '', imageUrl: url = '', withModal = true, favouriteIcon }) => {
-    let {catId} = useParams();
-    if(catId === undefined && id !== '' ) {
-        catId = id;
-    }
+    const catId = useParams().catId || id;
     
     const [description, setDescription] = useState<string>('');
     const [imageUrl, setImageUrl] = useState<string>(url);
@@ -107,7 +104,7 @@ const CatDetail: React.FC<CatDetailProps> = ({ catId: id = '', imageUrl: url = '
         fetchCatDescription();
     }, [catId]);
 
-    const handleAddToFavorites = useCallback(async () => {
+    const handleAddToFavorites = useCallback(async (evt: React.MouseEvent) => {
         const successFullySaved = await saveToFavorites(catId || '');
         if(successFullySaved) {
             setShowSucessMessage(true);
@@ -158,7 +155,7 @@ const CatDetail: React.FC<CatDetailProps> = ({ catId: id = '', imageUrl: url = '
             {
                 favouriteIcon || <FavouritesIcon data-testid='add_to_favorites_icon' onClick={async(evt) => {
                     evt.stopPropagation();
-                    await handleAddToFavorites();
+                    await handleAddToFavorites(evt);
                 }} />
             }
             {showErrorMessage && <InformationText>Could not save to favorites</InformationText>}

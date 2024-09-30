@@ -53,7 +53,7 @@ const Favorites: React.FC = () => {
                             imagesPerRow={Math.min(imagesPerRow,favorites.length)}
                             icon = {<RemoveFavoritesIcon 
                                 data-testid="remove-favorite-icon"
-                                onClick={async () => {
+                                onClick={async (evt) => {
                                     await handleRemoveFromFavorites(favorite.id);
                                     await fetchFavorites();
                                 }}

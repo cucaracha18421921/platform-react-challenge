@@ -81,7 +81,9 @@ describe('RandomCatsScreen', () => {
         expect(input).toHaveValue(4);
         const allLis = getAllByTestId('cat-image-container');
         allLis.forEach((li, index) => {
-            expect(li).toHaveAttribute('style','width: 25%; display: flex; justify-content: center; align-items: center;');
+            let computedStyle = getComputedStyle(li);
+            var width = computedStyle.width;
+            expect(width).toEqual("25%");
         });
     });
 })

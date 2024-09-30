@@ -12,10 +12,25 @@ interface CatImageProps {
   icon?: React.ReactNode;
 }
 
-const CatImageContainer = styled.li`
+const CatImageContainer = styled.li<{$width?: number}>`
     display: flex;
     justify-content: center;
     align-items: center;
+    width: ${props => props.$width}%;
+`;
+
+const CatImageImg = styled.img`
+    max-width: 90%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+`;
+
+const CatImageImgContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 `;
 
 const CatImage: React.FC<CatImageProps> = ({ catUrl, catId, index, imagesPerRow, withModal = true, icon}) => {
@@ -25,21 +40,20 @@ const CatImage: React.FC<CatImageProps> = ({ catUrl, catId, index, imagesPerRow,
     };
 
     return (
-        <li data-testid="cat-image-container" key={catId} style={{ width: `${100 / imagesPerRow}%`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div
+        <CatImageContainer data-testid="cat-image-container" key={catId} $width={100/imagesPerRow}>
+            <CatImageImgContainer
                 data-testid={`cat-image-${index}`}
-                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}
                 onClick={handleClick}
             >
-                <img src={catUrl} alt={`Cat ${index + 1}`} style={{ maxWidth: '90%', maxHeight: '100%', width: 'auto', height: 'auto' }} />
-            </div>
+                <CatImageImg src={catUrl} alt={`Cat ${index + 1}`} />
+            </CatImageImgContainer>
             {withModal && showModal && (
                 <Modal onClick={() => { setShowModal(false) }}>
                     <CatDetail imageUrl={catUrl} catId={catId} favouriteIcon={icon}/>
                 </Modal>
             )}
             {!withModal && <CatDetail imageUrl={catUrl} catId={catId} />}
-        </li>
+        </CatImageContainer>
     );
 };
 
